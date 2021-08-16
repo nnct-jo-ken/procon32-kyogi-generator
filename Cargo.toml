@@ -6,3 +6,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+image = "0.23.14"
+rand = "0.8.4"
+reqwest = { version = "0.11.4", features = ["blocking"] }
+thiserror = "1.0.26"
