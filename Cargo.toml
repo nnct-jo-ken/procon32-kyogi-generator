@@ -11,3 +11,7 @@ image = "0.23.14"
 rand = "0.8.4"
 reqwest = { version = "0.11.4", features = ["blocking"] }
 thiserror = "1.0.26"
+
+[[bin]]
+name = "spg"
+doc = false
