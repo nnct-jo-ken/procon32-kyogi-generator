@@ -1,15 +1,16 @@
 mod fetch;
 mod puzzle;
 
-use clap::{App, Arg};
+use clap::{crate_authors, crate_version, App, Arg};
 use puzzle::Puzzle;
 use std::fs;
 use std::io::BufWriter;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let matches = App::new("Shuffle Puzzle Generator")
-        .version("0.1.1")
-        .author("Shuntaro Nishizawa <me@shun.technology>")
+        .name("spg")
+        .version(crate_version!())
+        .author(crate_authors!())
         .about("Generate shuffle puzzle problem")
         .arg(
             Arg::with_name("division_size")
