@@ -16,7 +16,7 @@ const MIN_COST_RATE: u32 = 1;
 const MAX_COST_RATE: u32 = 500;
 
 #[derive(Debug)]
-pub struct Pazzle {
+pub struct Puzzle {
     division: (u32, u32),
     division_size: u32,
     select_limit: u32,
@@ -25,7 +25,7 @@ pub struct Pazzle {
     image: RgbImage,
 }
 
-impl Pazzle {
+impl Puzzle {
     fn new(
         division_size: u32,
         select_limit: u32,
@@ -33,7 +33,7 @@ impl Pazzle {
         swap_rate: u32,
         image: RgbImage,
     ) -> Self {
-        Pazzle {
+        Puzzle {
             division: (
                 (image.width() / division_size),
                 (image.height() / division_size),

@@ -2,7 +2,7 @@ mod fetch;
 mod puzzle;
 
 use clap::{App, Arg};
-use puzzle::Pazzle;
+use puzzle::Puzzle;
 use std::fs;
 use std::io::BufWriter;
 
@@ -93,7 +93,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let source_name = matches.value_of("source_name").unwrap();
     let problem_name = matches.value_of("problem_name").unwrap();
 
-    let mut puzzle = Pazzle::generate(
+    let mut puzzle = Puzzle::generate(
         division_size,
         division,
         select_limit,
