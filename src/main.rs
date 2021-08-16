@@ -106,8 +106,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     puzzle.decode(&mut source_file)?;
 
-    puzzle.random_swap(50);
-    puzzle.random_rotate(50);
+    puzzle.random_swap();
+    puzzle.random_rotate();
 
     puzzle.decode(&mut problem_file)?;
 

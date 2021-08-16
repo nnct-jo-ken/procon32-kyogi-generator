@@ -164,8 +164,8 @@ impl Puzzle {
         tile
     }
 
-    pub fn random_swap(&mut self, count: u32) {
-        for _ in 0..count {
+    pub fn random_swap(&mut self) {
+        for _ in 0..(self.division.0 * self.division.1 * 5) {
             let tile_a = self.select_random_tile();
             let tile_b = self.select_random_tile();
 
@@ -173,10 +173,10 @@ impl Puzzle {
         }
     }
 
-    pub fn random_rotate(&mut self, count: u32) {
+    pub fn random_rotate(&mut self) {
         let mut rng = rand::thread_rng();
 
-        for _ in 0..count {
+        for _ in 0..(self.division.0 * self.division.1 * 5) {
             let tile = self.select_random_tile_without_upper_left();
             let rotate = rng.gen();
 
