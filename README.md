@@ -12,12 +12,12 @@
 
 ```
 $ spg --help
-Shuffle Puzzle Generator 1.0
-Shuntaro Nishizawa <me@shun.technology>
+spg 0.1.2
+
 Generate shuffle puzzle problem
 
 USAGE:
-    slide-puzzle-generator [OPTIONS] <source_name> <problem_name>
+    spg [OPTIONS] <source_name> <problem_name>
 
 FLAGS:
     -h, --help       Prints help information
