@@ -1,5 +1,6 @@
 use crate::fetch::fetch_image;
 use image::{imageops, RgbImage};
+use rand::distributions::{Distribution, Standard};
 use rand::Rng;
 use std::io::{self, Write};
 
@@ -99,7 +100,7 @@ impl Pazzle {
         Ok(())
     }
 
-    pub fn swap_tile(&mut self, tile_a: (u32, u32), tile_b: (u32, u32)) {
+    fn swap_tile(&mut self, tile_a: (u32, u32), tile_b: (u32, u32)) {
         for x in 0..self.division_size {
             for y in 0..self.division_size {
                 let p1 = self.image.get_pixel_mut(
@@ -117,7 +118,7 @@ impl Pazzle {
         }
     }
 
-    pub fn rotate_tile(&mut self, (tile_x, tile_y): (u32, u32), direction: RotateDirection) {
+    fn rotate_tile(&mut self, (tile_x, tile_y): (u32, u32), direction: RotateDirection) {
         let mut tile = imageops::crop(
             &mut self.image,
             tile_x * self.division_size,
@@ -144,6 +145,44 @@ impl Pazzle {
             }
         }
     }
+
+    fn select_random_tile(&self) -> (u32, u32) {
+        let mut rng = rand::thread_rng();
+
+        let x = rng.gen_range(0..self.division.0);
+        let y = rng.gen_range(0..self.division.1);
+        (x, y)
+    }
+
+    fn select_random_tile_without_upper_left(&self) -> (u32, u32) {
+        let mut tile = (0, 0);
+
+        while tile.0 == 0 && tile.1 == 0 {
+            tile = self.select_random_tile()
+        }
+
+        tile
+    }
+
+    pub fn random_swap(&mut self, count: u32) {
+        for _ in 0..count {
+            let tile_a = self.select_random_tile();
+            let tile_b = self.select_random_tile();
+
+            self.swap_tile(tile_a, tile_b);
+        }
+    }
+
+    pub fn random_rotate(&mut self, count: u32) {
+        let mut rng = rand::thread_rng();
+
+        for _ in 0..count {
+            let tile = self.select_random_tile_without_upper_left();
+            let rotate = rng.gen();
+
+            self.rotate_tile(tile, rotate);
+        }
+    }
 }
 
 #[allow(unused)]
@@ -152,6 +191,17 @@ pub enum RotateDirection {
     Rotate90,
     Rotate180,
     Rotate270,
+}
+
+impl Distribution<RotateDirection> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> RotateDirection {
+        match rng.gen_range(0..3) {
+            0 => RotateDirection::Rotate90,
+            1 => RotateDirection::Rotate180,
+            2 => RotateDirection::Rotate270,
+            _ => unreachable!(),
+        }
+    }
 }
 
 fn generate_division_size() -> u32 {
