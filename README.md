@@ -5,7 +5,8 @@
 ## Install
 
 1. Install Rust and Cargo (See: [rustup.rs](https://rustup.rs/))
-2. Install this binary with `cargo install --git https://github.com/procon32/slide-puzzle-generator.git`
+2. Clone this repository
+2. Install this binary with `cargo install --path <repository_path>`
 
 ## Usage
 
