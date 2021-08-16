@@ -8,7 +8,7 @@ use std::io::BufWriter;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let matches = App::new("Shuffle Puzzle Generator")
-        .version("1.0")
+        .version("0.1.1")
         .author("Shuntaro Nishizawa <me@shun.technology>")
         .about("Generate shuffle puzzle problem")
         .arg(
