@@ -1,5 +1,5 @@
 use crate::fetch::fetch_image;
-use image::RgbImage;
+use image::{imageops, RgbImage};
 use rand::Rng;
 use std::io::{self, Write};
 
@@ -17,6 +17,7 @@ const MAX_COST_RATE: u32 = 500;
 #[derive(Debug)]
 pub struct Pazzle {
     division: (u32, u32),
+    division_size: u32,
     select_limit: u32,
     select_rate: u32,
     swap_rate: u32,
@@ -36,6 +37,7 @@ impl Pazzle {
                 (image.width() / division_size),
                 (image.height() / division_size),
             ),
+            division_size,
             select_limit,
             select_rate,
             swap_rate,
@@ -96,6 +98,60 @@ impl Pazzle {
 
         Ok(())
     }
+
+    pub fn swap_tile(&mut self, tile_a: (u32, u32), tile_b: (u32, u32)) {
+        for x in 0..self.division_size {
+            for y in 0..self.division_size {
+                let p1 = self.image.get_pixel_mut(
+                    tile_a.0 * self.division_size + x,
+                    tile_a.1 * self.division_size + y,
+                ) as *mut _;
+                let p2 = self.image.get_pixel_mut(
+                    tile_b.0 * self.division_size + x,
+                    tile_b.1 * self.division_size + y,
+                ) as *mut _;
+                unsafe {
+                    std::ptr::swap(p1, p2);
+                }
+            }
+        }
+    }
+
+    pub fn rotate_tile(&mut self, (tile_x, tile_y): (u32, u32), direction: RotateDirection) {
+        let mut tile = imageops::crop(
+            &mut self.image,
+            tile_x * self.division_size,
+            tile_y * self.division_size,
+            self.division_size,
+            self.division_size,
+        );
+
+        let new_tile = match direction {
+            RotateDirection::Rotate90 => imageops::rotate90(&mut tile),
+            RotateDirection::Rotate180 => imageops::rotate180(&mut tile),
+            RotateDirection::Rotate270 => imageops::rotate270(&mut tile),
+        };
+
+        for x in 0..self.division_size {
+            for y in 0..self.division_size {
+                let pixel = new_tile.get_pixel(x, y);
+
+                self.image.put_pixel(
+                    tile_x * self.division_size + x,
+                    tile_y * self.division_size + y,
+                    *pixel,
+                );
+            }
+        }
+    }
+}
+
+#[allow(unused)]
+#[derive(Debug)]
+pub enum RotateDirection {
+    Rotate90,
+    Rotate180,
+    Rotate270,
 }
 
 fn generate_division_size() -> u32 {
